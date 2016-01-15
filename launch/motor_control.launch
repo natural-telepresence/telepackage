@@ -1,0 +1,5 @@
+<launch>
+
+<node pkg="telepackage" type="motor_control.py" name="motor_control" launch-prefix="sudo -S" output="screen" />
+
+</launch>
