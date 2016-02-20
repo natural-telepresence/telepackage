@@ -44,7 +44,9 @@ class GimbalController(object):
                 self.broad.sendTransform((0, 0, 0), tf.transformations.quaternion_from_euler(roll, pitch, yaw), rospy.Time.now(), "phone", "world")
 
                 self.pubx.publish(roll + 2.62)
-		self.puby.publish(pitch + 2.62)
+
+                if (pitch + 2.62) > 1.8 and (pitch + 2.61) < 4.2:
+                    self.puby.publish(pitch + 2.62)
 		self.pubz.publish(yaw + 2.546)
 
 
