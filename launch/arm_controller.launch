@@ -1,0 +1,5 @@
+<launch>
+
+<node name="arm_controller" pkg="telepackage" type="arm_controller.py" output="screen" />
+
+</launch>

@@ -1,0 +1,12 @@
+<launch>
+
+<include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch"/>
+
+<include file="$(find telepackage)/launch/usb_cam.launch"/>
+<include file="$(find imu_complementary_filter)/launch/complementary_filter.launch"/>
+<include file="$(find telepackage)/launch/arm_controller.launch"/>
+<include file="$(find telepackage)/launch/web_video_server.launch"/>
+
+<include file="$(find dynamixel_controllers)/launch/gimbal.launch"/>
+
+</launch>

@@ -1,0 +1,7 @@
+<launch>
+
+<node name="web_video_server" pkg="web_video_server" type="web_video_server" output="screen">
+    <param name="quality" type="int" value="1" />
+</node>
+
+</launch>
