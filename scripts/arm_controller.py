@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import rospy
+import tf.transformations
 from std_msgs.msg import Float64
 from sensor_msgs.msg import Imu
 
@@ -8,10 +9,16 @@ class GimbalController(object):
 		self.pubx = rospy.Publisher("/motor_x/command", Float64, queue_size = 10)
 		self.puby = rospy.Publisher("/motor_y/command", Float64, queue_size = 10)
 		self.pubz = rospy.Publisher("/motor_z/command", Float64, queue_size = 10)
-		self.sub = rospy.Subscriber("/cardboard/imu", Imu, self.imu) 
+		self.sub = rospy.Subscriber("/cardboard/imu", Imu, self.imu)
 
 	def imu(self, data):
-		euler = tf.transformations.euler_from_quaternion(data.orientation)
+                quaternion = (
+                        data.orientation.x,
+                        data.orientation.y,
+                        data.orientation.z,
+                        data.orientation.w)
+
+                euler = tf.transformations.euler_from_quaternion(quaternion)
 		roll = euler[0]
 		pitch = euler[1]
 		yaw = euler[2]
