@@ -2,7 +2,7 @@
 import rospy
 import tf
 from std_msgs.msg import Float64
-from std_svrs.msg import Trigger
+from std_srvs.srv import Trigger
 from sensor_msgs.msg import Imu
 import numpy as np
 from dynamixel_msgs.msg import JointState
@@ -29,6 +29,7 @@ class GimbalController(object):
 
     def calibrate(self, data):
         self.q_zero = self.current_q
+        return [True, 'worked!']
 
     def imu(self, data):
 
