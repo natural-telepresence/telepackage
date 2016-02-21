@@ -4,6 +4,7 @@ import tf
 from std_msgs.msg import Float64
 from sensor_msgs.msg import Imu
 import numpy as np
+from dynamixel_msgs.msg import JointState
 
 class GimbalController(object):
 	def __init__(self):
@@ -11,10 +12,16 @@ class GimbalController(object):
 		self.puby = rospy.Publisher("/motor_y/command", Float64, queue_size = 10)
 		self.pubz = rospy.Publisher("/motor_z/command", Float64, queue_size = 10)
 		self.sub = rospy.Subscriber("/imu/data", Imu, self.imu)
+                self.yaw_sub = rospy.Subscriber("motor_z/state", JointState, self.yaw_cb)
 
                 self.broad = tf.TransformBroadcaster()
                 self.first = True
                 self.q_zero = (0.0, 0.0, 0.0, 1.0)
+
+                self.cur_yaw = 0.0
+
+        def yaw_cb(self, data):
+            self.cur_yaw = data.current_pos
 
         def imu(self, data):
 
@@ -47,7 +54,13 @@ class GimbalController(object):
 
                 if (pitch + 2.62) > 1.8 and (pitch + 2.61) < 4.2:
                     self.puby.publish(pitch + 2.62)
-		self.pubz.publish(yaw + 2.546)
+
+                if self.cur_yaw > 5.2 and yaw < 0.0:
+                    pass
+                elif (self.cur_yaw) < 0.2 and yaw > 0.0:
+                    pass
+                else:
+                    self.pubz.publish(yaw + 2.546)
 
 
 if __name__ == '__main__':
