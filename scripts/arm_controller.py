@@ -45,7 +45,7 @@ class GimbalController(object):
             self.first = False
             self.q_zero = np.copy(quaternion)
 
-        q_error = tf.transformations.quaternion_multiply(tf.transformations.quaternion_inverse(self.q_zero), quaternion)
+        q_error = tf.transformations.quaternion_multiply(tf.transformations.quaternion_inverse(self.q_zero), self.current_q)
 
         euler = tf.transformations.euler_from_quaternion(q_error)
         roll = -euler[1]
