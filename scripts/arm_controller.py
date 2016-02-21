@@ -2,6 +2,7 @@
 import rospy
 import tf
 from std_msgs.msg import Float64
+from std_svrs.msg import Trigger
 from sensor_msgs.msg import Imu
 import numpy as np
 from dynamixel_msgs.msg import JointState
@@ -14,25 +15,30 @@ class GimbalController(object):
         self.pubz = rospy.Publisher("/motor_z/command", Float64, queue_size=10)
         self.sub = rospy.Subscriber("/imu/data", Imu, self.imu)
         self.yaw_sub = rospy.Subscriber("motor_z/state", JointState, self.yaw_cb)
+        self.calibration = rospy.Service("/imu/calibrate", Trigger, self.calibrate)
 
         self.broad = tf.TransformBroadcaster()
         self.first = True
         self.q_zero = (0.0, 0.0, 0.0, 1.0)
+        self.current_q = (0.0, 0.0, 0.0, 1.0)
 
         self.cur_yaw = 0.0
 
     def yaw_cb(self, data):
         self.cur_yaw = data.current_pos
 
+    def calibrate(self, data):
+        self.q_zero = self.current_q
+
     def imu(self, data):
 
-        quaternion = (
+        self.current_q = (
             data.orientation.x,
             data.orientation.y,
             data.orientation.z,
             data.orientation.w)
 
-        print(quaternion)
+        print(self.current_q)
 
         if self.first:
             self.first = False
